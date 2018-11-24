@@ -1,0 +1,51 @@
+<configuration debug="false" scan="true" scanPeriod="5 seconds">
+    <!-- JMX  -->
+    <jmxConfigurator />
+
+    <!--경로 속 설정-->
+    <property name="LOG_PATH" value="/usr/local/csblog"/>
+    <!--로그 파일에 날짜별 파일 만들 때 사용하기 위한 설정-->
+    <timestamp key="byDate" datePattern="yyyy-MM-dd"/>
+
+
+    <!-- Console Appender 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--출력 형식-->
+        <encoder>
+            <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%12.12t] %-25.25c{1} %-5p %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Level change listening
+         로그 레벨 바뀐걸 전파하는? 그런 클래스인
+    -->
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+
+    <appender name="MESSAGE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/messageLogFile.${byDate}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>messageLogFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%12.12t] %-25.25c{1} %-5p %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="IN_MESSAGE" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="MESSAGE" />
+    </logger>
+
+    <logger name="OUT_MESSAGE" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="MESSAGE" />
+    </logger>
+
+
+</configuration>
