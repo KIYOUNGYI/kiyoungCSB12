@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- xmlns:context 추가했음-->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <context:component-scan base-package="com.kiyoung.cloud" />
+
+
+    <routeContext xmlns="http://camel.apache.org/schema/spring" id="SERVICE_ROUTE">
+
+        <route id="LOGIN-SERVICE-CALL">
+            <from uri="direct:login-sevice-call" />
+            <process ref="loginServiceProcess" />
+            <process ref="resultCode"/>
+        </route>
+
+
+    </routeContext>
+
+
+    <bean id="loginServiceProcess" class="com.kiyoung.cloud.common.service.LoginServiceProcess" />
+
+    <!--호출 후 Result 코드를 세팅하기 위한 Processor -->
+    <bean id="resultCode" class="com.kiyoung.cloud.common.service.ResultCodeProcessor">
+        <property name="resultCodeElement" value="resultCode"/>  <!-- Optional Element -->
+        <property name="defaultResultCode" value="0000"/>  <!-- Optional Element -->
+    </bean>
 
 </beans>

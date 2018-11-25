@@ -6,13 +6,106 @@
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+
     <import resource="classpath:/META-INF/spring/kiyoung-csb-common.xml" />
 
+    <import resource="classpath:/META-INF/spring/kiyoung-csb-dataformat.xml"/>
+
+    <!--이놈(1)-->
+    <import resource="classpath:/META-INF/spring/kiyoung-csb-service.xml"/>
+
+
+
+
     <camelContext xmlns="http://camel.apache.org/schema/spring" trace="true">
+
+        <!-- 이놈(3) -->
+        <!--<routeContextRef ref="FRONTEND_ROUTE"/>-->
+        <!--&lt;!&ndash; 이놈(4) &ndash;&gt;-->
+        <!--<routeContextRef ref="SERVICE_ROUTE"/>-->
+
+
+        <!-- alivecheck -->
         <route>
             <from uri="servlet:/check?servletName=CSBServlet" />
             <process ref="deployCheck" />
         </route>
 
+        <!-- csb/login -->
+        <route>
+            <from uri="servlet:/login?servletName=CSBServlet" />
+            <!-- 로그인 라우터로 (아래) -->
+            <to uri="direct:login" />
+        </route>
+
+
+
+
+        <route id="로그인라우터">
+            <from uri="direct:login" />
+
+            <!--&lt;!&ndash; 로그 설정 &ndash;&gt;-->
+            <to uri="log:IN_MESSAGE?level=DEBUG&amp;showBody=true&amp;showHeaders=true&amp;multiline=false&amp;showExchangeId=true"/>
+
+            <setHeader headerName="log_type"><constant>IN</constant></setHeader>
+
+            <to uri="direct:front-requestProcess" /> <!--kiyoung-csb-frontend로 보냄-->
+            <to uri="direct:login-sevice-call" />  <!--kiyoung-csb-service로 보냄-->
+
+
+
+            <!--<setHeader headerName="log_type"><constant>OUT</constant></setHeader>-->
+            <!--&lt;!&ndash; 			<removeHeaders pattern="*" excludePattern="Content-Type" /> &ndash;&gt;-->
+            <!--<to uri="log:OUT_MESSAGE?level=DEBUG&amp;-->
+                                   <!--showBody=true&amp;-->
+                                <!--showHeaders=true&amp;-->
+                                 <!--multiline=false&amp;-->
+                                 <!--showExchangeId=true"/>-->
+
+            <!--<convertBodyTo type="String" charset="{{ROUTE.CLIENT_ENCODING}}" />-->
+        </route>
+
+        <!--csb-frontend에 있던 것-->
+        <route id="FrontEnd요청처리">
+            <from uri="direct:front-requestProcess"/>
+            <process ref="headerValueValidateProcessor"/>
+            <unmarshal ref="gson"/>   <!-- Json 데이터를 객체로 -->
+        </route>
+
+        <!--csb-service에 있던 것-->
+        <route id="LOGIN-SERVICE-CALL">
+            <from uri="direct:login-sevice-call" />
+            <process ref="loginServiceProcess" />
+            <process ref="resultCode"/>
+        </route>
+
+
     </camelContext>
+
+    <!---->
+    <bean id="headerValueValidateProcessor" class="com.kiyoung.cloud.extension.accesscontrol.HeaderValueValidateProcessor">
+
+        <!-- testMode를 property 로 빼 -->
+        <property name="testMode" value="false"/>
+        <!--서비스와 메소드를 필수 헤더값으로 지정-->
+        <property name="headerKeyList">
+            <list>
+                <value>service</value>
+                <value>method</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--kiyoung-csb-service 에 있던 것...-->
+    <bean id="loginServiceProcess" class="com.kiyoung.cloud.common.service.LoginServiceProcess" />
+
+    <!--호출 후 Result 코드를 세팅하기 위한 Processor -->
+    <bean id="resultCode" class="com.kiyoung.cloud.common.service.ResultCodeProcessor">
+        <property name="resultCodeElement" value="resultCode"/>  <!-- Optional Element -->
+        <property name="defaultResultCode" value="0000"/>  <!-- Optional Element -->
+    </bean>
+
+
+
 </beans>

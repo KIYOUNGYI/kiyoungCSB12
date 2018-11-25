@@ -46,6 +46,12 @@
             <version>LATEST</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-gson</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
         <!-- we need spring web -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -53,6 +59,17 @@
             <version>LATEST</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>LATEST</version>
+        </dependency>
 
         <!-- Logging -->
         <dependency>
