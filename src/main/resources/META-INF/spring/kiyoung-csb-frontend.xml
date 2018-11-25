@@ -7,7 +7,7 @@
 
 
 
-    <routeContext xmlns="http://camel.apache.org/schema/spring" id="FRONTEND_ROUTE">
+    <routeContext id="FRONTEND_ROUTE" xmlns="http://camel.apache.org/schema/spring">
 
         <!-- header를 검증하는 서비스  -->
         <route id="FrontEnd요청처리">

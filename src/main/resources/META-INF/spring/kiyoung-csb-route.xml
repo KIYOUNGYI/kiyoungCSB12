@@ -14,15 +14,16 @@
     <!--이놈(1)-->
     <import resource="classpath:/META-INF/spring/kiyoung-csb-service.xml"/>
 
-
+    <!--이놈(3) 임포트를 시켜야 FRONTEND_ROUTE 사용 가능-->
+    <import resource="classpath:/META-INF/spring/kiyoung-csb-frontend.xml"/>
 
 
     <camelContext xmlns="http://camel.apache.org/schema/spring" trace="true">
 
-        <!-- 이놈(3) -->
-        <!--<routeContextRef ref="FRONTEND_ROUTE"/>-->
-        <!--&lt;!&ndash; 이놈(4) &ndash;&gt;-->
-        <!--<routeContextRef ref="SERVICE_ROUTE"/>-->
+        <!-- 이놈(3) 내가 삽질했던건, 위에 kiyoung-csb-frontend를 import 안시켰기 때문... -->
+        <routeContextRef ref="FRONTEND_ROUTE"/>
+
+        <routeContextRef ref="SERVICE_ROUTE"/>
 
 
         <!-- alivecheck -->
@@ -64,48 +65,6 @@
 
             <!--<convertBodyTo type="String" charset="{{ROUTE.CLIENT_ENCODING}}" />-->
         </route>
-
-        <!--csb-frontend에 있던 것-->
-        <route id="FrontEnd요청처리">
-            <from uri="direct:front-requestProcess"/>
-            <process ref="headerValueValidateProcessor"/>
-            <unmarshal ref="gson"/>   <!-- Json 데이터를 객체로 -->
-        </route>
-
-        <!--csb-service에 있던 것-->
-        <route id="LOGIN-SERVICE-CALL">
-            <from uri="direct:login-sevice-call" />
-            <process ref="loginServiceProcess" />
-            <process ref="resultCode"/>
-        </route>
-
-
     </camelContext>
-
-    <!---->
-    <bean id="headerValueValidateProcessor" class="com.kiyoung.cloud.extension.accesscontrol.HeaderValueValidateProcessor">
-
-        <!-- testMode를 property 로 빼 -->
-        <property name="testMode" value="false"/>
-        <!--서비스와 메소드를 필수 헤더값으로 지정-->
-        <property name="headerKeyList">
-            <list>
-                <value>service</value>
-                <value>method</value>
-            </list>
-        </property>
-    </bean>
-
-
-    <!--kiyoung-csb-service 에 있던 것...-->
-    <bean id="loginServiceProcess" class="com.kiyoung.cloud.common.service.LoginServiceProcess" />
-
-    <!--호출 후 Result 코드를 세팅하기 위한 Processor -->
-    <bean id="resultCode" class="com.kiyoung.cloud.common.service.ResultCodeProcessor">
-        <property name="resultCodeElement" value="resultCode"/>  <!-- Optional Element -->
-        <property name="defaultResultCode" value="0000"/>  <!-- Optional Element -->
-    </bean>
-
-
 
 </beans>
