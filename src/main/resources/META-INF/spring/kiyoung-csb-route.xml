@@ -53,7 +53,9 @@
             <to uri="direct:front-requestProcess" /> <!--kiyoung-csb-frontend로 보냄-->
             <to uri="direct:login-sevice-call" />  <!--kiyoung-csb-service로 보냄-->
 
-
+            <setHeader headerName="log_type"><constant>OUT</constant></setHeader>
+            <to uri="log:OUT_MESSAGE?level=DEBUG&amp;showBody=true&amp;showHeaders=true&amp;multiline=false&amp;showExchangeId=true"/>
+            <convertBodyTo type="String" charset="UTF-8" />
 
             <!--<setHeader headerName="log_type"><constant>OUT</constant></setHeader>-->
             <!--&lt;!&ndash; 			<removeHeaders pattern="*" excludePattern="Content-Type" /> &ndash;&gt;-->
