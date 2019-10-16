@@ -5,16 +5,20 @@ import java.util.Map;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 소스 정상 Deploy 여부를 체크하기 위한 Class
  *
- * @author heokjin
- * @since 2012.10.16
+ * @author Kiyoung
+ * @since 2019.10.16
  * @version 1.0
  */
 public class DeployCheck implements Processor {
 
+	private Logger log = LoggerFactory.getILoggerFactory().getLogger(this.getClass().getName());
+	
     public void process(Exchange exchange) throws Exception {
 //	System.out.println("**************************************");
 //	System.getProperties().list(System.out);
@@ -30,6 +34,7 @@ public class DeployCheck implements Processor {
         // send a html response
 //	exchange.getOut().setBody("<html><body>OK!! </br>" + sb.toString() + "</body></html>");
         // Thread.sleep(5000);
+        log.error("alivecheck!");
         exchange.getOut().setBody("<html><body>OK!!</body></html>");
     }
 }

@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd 
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<context:component-scan base-package="com.kiyoung.cloud"></context:component-scan>
+	
+	<routeContext
+		xmlns="http://camel.apache.org/schema/spring" id="SERVICE_ROUTE">
+
+		<route id="LOGIN-SERVICE-CALL">
+			<from uri="direct:login-sevice-call" />
+			<process ref="loginServiceProcess"/>
+			<process ref="resultCode" />
+		</route>
+		<!-- SERVICE-CALL사용 안하고 있음. 사용 안하면 없앨 예정  -->
+		<route id="SERVICE-CALL">
+			<from uri="direct:service-call"/>
+			<process ref="serviceProcess" />
+			<process ref="resultCode"/>
+		</route>
+		
+
+	</routeContext>
+
+	<bean id="serviceProcess" class="com.kiyoung.cloud.common.service.ServiceProcess"/>
+	
+	<bean id="loginServiceProcess" class="com.kiyoung.cloud.common.service.LoginServiceProcess" />
+
+	<bean id="resultCode" class="com.kiyoung.cloud.common.service.ResultCodeProcessor">
+		<property name="resultCodeElement" value="resultCode" />  <!-- Optional Element -->
+		<property name="defaultResultCode" value="0000" />  <!-- Optional Element -->
+	</bean>
+
 
 </beans>

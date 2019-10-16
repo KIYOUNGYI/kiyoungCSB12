@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="deployCheck" class="com.kiyoung.cloud.common.deploy.DeployCheck"></bean>
-
+	<bean id="deployCheck" class="com.kiyoung.cloud.common.deploy.DeployCheck"></bean>
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/META-INF/properties/db.properties</value>
+				<value>classpath:/META-INF/properties/route.properties</value>
+				<value>classpath:/META-INF/properties/biz.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="messageSourceFile" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:META-INF/messages/Messages</value>
+			</list>
+		</property>
+		<property name="cacheSeconds" value="0" />
+	</bean>	
+	
 </beans>

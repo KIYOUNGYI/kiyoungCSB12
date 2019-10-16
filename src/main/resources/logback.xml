@@ -1,0 +1,130 @@
+<configuration debug="false" scan="true" scanPeriod="5 seconds">
+    <!-- JMX  -->
+	<jmxConfigurator />
+	
+	<property name="LOG_PATH" value="/csblog"/>
+	
+	<!-- Current date(for file name) -->
+    <timestamp key="byDate" datePattern="yyyy-MM-dd"/>
+
+    <!-- Console Appender -->  
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+             <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%12.12t] %-25.25c{1} %-5p %m%n</pattern>
+        </encoder>
+    </appender>
+    
+	<appender name="CONSOLE_DASHBOARD" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+			<pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+	<!-- Level change listening -->
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+	</contextListener>
+
+    <appender name="CORE" class="ch.qos.logback.core.rolling.RollingFileAppender" >
+        <file>${LOG_PATH}/coreLogFile_${byDate}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>coreLogFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+             <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%12.12t] %-25.25c{1} %-5p %m%n</pattern>
+        </encoder>
+    </appender> 
+
+    <appender name="MESSAGE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/messageLogFile.${byDate}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>messageLogFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+             <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%12.12t] %-25.25c{1} %-5p %m%n</pattern>
+        </encoder>
+    </appender> 
+	
+	 <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/TraceLogFile.${byDate}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>TestLogFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.duzon.dcloud.common.log.MessageLayout">
+                <locationInfo>true</locationInfo>
+	        </layout>
+        </encoder> 
+    </appender> 
+    
+    <appender name="DASHBOARD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/dashboard.${byDate}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>dashboard.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+			<pattern>%m%n</pattern>
+        </encoder>
+    </appender> 
+	
+	<logger name="TRACE" level="ERROR" additivity="false">
+		<appender-ref ref="TRACE" />
+	</logger>
+    
+    <logger name="SYSTEM_EVENT" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="IN_MESSAGE" level="DEBUG" additivity="false">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="MESSAGE" />
+	</logger>
+	
+	<logger name="DASHBOARD" level="DEBUG" additivity="false">
+		<appender-ref ref="CONSOLE_DASHBOARD" />
+		<appender-ref ref="DASHBOARD" />
+	</logger>
+	
+	<logger name="OUT_MESSAGE" level="DEBUG" additivity="false">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="MESSAGE" />
+	</logger>
+	
+	<logger name="com.kiyoung.cloud" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="MESSAGE" />
+    </logger>
+    <logger name="BIZ" level="DEBUG" additivity="false">
+		<appender-ref ref="MESSAGE" />
+		 <appender-ref ref="CONSOLE" />
+	</logger>
+	<!--
+    <logger name="org.apache" level="ERROR" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="MESSAGE" />
+    </logger>
+     -->
+<!--     <logger name="java.sql.Connection" level="DEBUG" additivity="false"> -->
+<!-- 		<appender-ref ref="MESSAGE" /> -->
+<!-- 		<appender-ref ref="CONSOLE" /> -->
+<!-- 	</logger> -->
+<!-- 	<logger name="java.sql.PreparedStatement" level="DEBUG" -->
+<!-- 		additivity="false"> -->
+<!-- 		<appender-ref ref="MESSAGE" /> -->
+<!-- 		<appender-ref ref="CONSOLE" /> -->
+<!-- 	</logger> -->
+	
+	
+	
+    <!-- Root logger declaration -->
+	<root level="ERROR">
+		<appender-ref ref="CONSOLE" />
+	</root>
+	
+ 
+</configuration>
