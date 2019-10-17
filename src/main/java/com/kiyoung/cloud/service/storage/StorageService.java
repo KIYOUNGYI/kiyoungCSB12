@@ -2,7 +2,9 @@ package com.kiyoung.cloud.service.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.camel.Exchange;
@@ -11,6 +13,7 @@ import org.apache.camel.util.ObjectHelper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ import com.kiyoung.cloud.common.StorageConstant;
 import com.kiyoung.cloud.common.dto.DCloudResultSet;
 import com.kiyoung.cloud.common.exception.CSBException;
 import com.kiyoung.cloud.service.storage.dto.Session;
+import com.kiyoung.cloud.storage.dao.PostgreSQLDaoImpl;
 
 @Service("StorageSvc")
 public class StorageService {
@@ -28,7 +32,37 @@ public class StorageService {
 	@Value("${ROOT_PATH}")
 	private String storageRootPath;
 	
+	@Autowired
+	public PostgreSQLDaoImpl postgreSQLDaoImpl;
 	
+	/**
+	 * Dummy Method
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	public DCloudResultSet dummy(HashMap<String,Object> inMap) throws Exception 
+	{
+		DCloudResultSet resultSet = new DCloudResultSet();
+		String email = (String) inMap.get("email");
+		String result = postgreSQLDaoImpl.getAccountByEmpNo(email);
+		Map<String, String> map = new HashMap<String, String>();
+//		map.put("systemPath", new File(mountPath + filePath).getPath().replace("\\", "/"));
+//		map.put("read", String.valueOf(read));
+		map.put("user_no", result);
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		list.add(map);
+		resultSet.setList(list);
+		log.debug("list>"+list.toString());
+		return resultSet;
+	}
+	
+	/**
+	 * 폴더 생성
+	 * @param exchange
+	 * @return
+	 * @throws Exception
+	 */
 	@Transactional
 	public DCloudResultSet create(Exchange exchange) throws Exception 
 	{
@@ -63,8 +97,7 @@ public class StorageService {
 		
 		return resultSet;
 	}
-
-
+	
 	private void createUserRootFolder(String rootSystemPath) throws CSBException {
 		//[1] session 뽑고 (생략)
 		// 루트시스템패스로 파일 만들고 
@@ -80,8 +113,6 @@ public class StorageService {
 		}
 		try {file.setExecutable(true, false);file.setReadable(true, false);file.setWritable(true, false);} catch (Exception e) {log.error("폴더 전체 권한주기 에러", e);}
 	}
-
-
 	
 	private DCloudResultSet createFolder(Exchange exchange) throws InvalidPayloadException, CSBException {
 		DCloudResultSet resultSet = new DCloudResultSet();
@@ -99,7 +130,6 @@ public class StorageService {
 		createFolderAndMeta(file,session);
 		return resultSet;
 	}
-
 
 	private void createFolderAndMeta(File file, Session session) throws CSBException {
 //		String rootPath = storageRootPath + File.separator + session.getBusinessConnectID() + File.separator + session.getUserConnectID();

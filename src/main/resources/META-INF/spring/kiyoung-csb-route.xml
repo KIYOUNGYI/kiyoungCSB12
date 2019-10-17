@@ -10,6 +10,7 @@
 	 <import resource="classpath:/META-INF/spring/kiyoung-csb-frontend.xml" />
 	 <import resource="classpath:/META-INF/spring/kiyoung-csb-dataformat.xml" />
 	 <import resource="classpath:/META-INF/spring/kiyoung-csb-service.xml" />
+	 <import resource="classpath:/META-INF/spring/kiyoung-csb-jdbc.xml" />
 	 
 	<camelContext xmlns="http://camel.apache.org/schema/spring" trace="true">
 		

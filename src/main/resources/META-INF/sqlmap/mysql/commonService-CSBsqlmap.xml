@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+	<resultMap
+		class="com.kiyoung.cloud.service.storage.dto.Session"
+		id="userSessionInfo">
+		<result property="company_no" column="cno" nullValue="" />
+		<result property="employee_no" column="employee_no"
+			nullValue="" />
+		<result property="businessconnectid" column="businessconnectid"
+			nullValue="" />
+		<result property="userconnectid" column="userconnectid"
+			nullValue="" />
+		<!-- <result property="id" column="id" nullValue="" /> <result property="domain" 
+			column="domain" nullValue="" /> -->
+		<result property="name" column="user_name" nullValue="" />
+		<result property="email" column="user_email" nullValue="" />
+		<!-- <result property="isNasStorage" column="isNasStorage" nullValue="" 
+			/> <result property="isObjectStorage" column="isObjectStorage" nullValue="" 
+			/> -->
+		<result property="user_no" column="user_no" nullValue="" />
+	</resultMap>
+
+
+	<select id="getUserNoByEmail" parameterClass="String"
+		resultClass="String">
+		SELECT user_no FROM public.t_user
+		WHERE user_email=#email#
+	</select>
+
+	<select id="getUserSessionInfoByPortalId"
+		parameterClass="String" resultMap="userSessionInfo">
+		select u.user_no::text
+		,e.employee_no::text,
+		u.user_email::text,
+		tb.businessconnectid,
+		tu.userconnectid,
+		e.cno::text,
+		u.user_email,
+		u.user_name
+		from
+		public.t_employee e,
+		public.tss_relation_user_id tu,
+		public.tss_relation_biz_id tb,
+		public.t_user u
+		where e.user_no = u.user_no
+		and tu.employee_no = e.employee_no
+		and tb.cno =
+		e.cno
+		and u.user_email = #email#
+	</select>
+</sqlMap>

@@ -90,9 +90,10 @@ public class Session {
 	}
 	@Override
 	public String toString() {
-		return "BCB Storage Session [company_no=" + company_no + ", employee_no="
-				+ employee_no + ", businessconnectid=" + businessconnectid
-				+ ", userconnectid=" + userconnectid + ", id=" + id
-				+ ", domain=" + domain + ", isNasStorage=" + isNasStorage + ", isObjectStorage=" + isObjectStorage + ", oauthTokenId=" + oauthTokenId + "]";
+		return "Session [company_no=" + company_no + ", employee_no=" + employee_no + ", businessconnectid="
+				+ businessconnectid + ", userconnectid=" + userconnectid + ", id=" + id + ", domain=" + domain
+				+ ", name=" + name + ", email=" + email + ", isNasStorage=" + isNasStorage + ", isObjectStorage="
+				+ isObjectStorage + ", user_no=" + user_no + ", oauthTokenId=" + oauthTokenId + "]";
 	}
+	
 }
