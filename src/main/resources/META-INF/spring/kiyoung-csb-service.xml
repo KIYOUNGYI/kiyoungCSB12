@@ -44,5 +44,21 @@
 		<property name="defaultResultCode" value="0000" />  <!-- Optional Element -->
 	</bean>
 
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxActive" value="300" />
+		<property name="maxIdle" value="300" />
+		<property name="minIdle" value="20" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="numTestsPerEvictionRun" value="10" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="maxWait" value="10000" />
+	</bean>
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool" destroy-method="destroy"> 
+   		<constructor-arg ref="jedisPoolConfig" /> 
+   		<constructor-arg value="${REDIS.HOST}" /> 
+   		<constructor-arg type="int" value="${REDIS.PORT}" /> 
+   		<constructor-arg type="int" value="10000"/>
+   	</bean>
 
 </beans>
