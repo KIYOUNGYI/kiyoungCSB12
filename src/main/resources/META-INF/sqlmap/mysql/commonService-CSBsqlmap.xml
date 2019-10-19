@@ -31,7 +31,25 @@
 		SELECT user_no FROM public.t_user
 		WHERE user_email=#email#
 	</select>
-
+	
+	<select id="getBizAndUserConnId" parameterClass="String"
+	resultClass="java.util.HashMap">
+		select
+		tb.businessconnectid,
+		tu.userconnectid
+		from
+		public.t_employee e,
+		public.tss_relation_user_id tu,
+		public.tss_relation_biz_id tb,
+		public.t_user u
+		where e.user_no = u.user_no
+		and tu.employee_no = e.employee_no
+		and tb.cno =
+		e.cno
+		and u.user_email = #email#
+	
+	</select>
+	
 	<select id="getUserSessionInfoByPortalId"
 		parameterClass="String" resultMap="userSessionInfo">
 		select u.user_no::text

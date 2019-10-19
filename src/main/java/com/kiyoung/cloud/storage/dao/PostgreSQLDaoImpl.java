@@ -1,6 +1,7 @@
 package com.kiyoung.cloud.storage.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,5 +21,10 @@ public class PostgreSQLDaoImpl extends BaseIBatisPostgreDaoImpl
 	public List getUserSessionInfoByPortalId(String portalId) throws Exception
 	{
 		return getSqlMapClientTemplate().queryForList("getUserSessionInfoByPortalId",portalId);
+	}
+	
+	public Map<String,Object> getBizAndUserConnId(String portalId) throws Exception
+	{
+		return (Map<String, Object>) getSqlMapClientTemplate().queryForObject("getBizAndUserConnId",portalId);
 	}
 }
