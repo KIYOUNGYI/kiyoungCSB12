@@ -32,5 +32,22 @@
    		<property name="mappingLocations" value="${SQLMAPCLIENT.MAPPINGLOCATIONS.POSTGRESQL}" />
 	</bean>
 	
+	<mongo:mongo host="${mongodb.url}" port="${mongodb.port}">
+    <mongo:options connections-per-host="30"
+                   threads-allowed-to-block-for-connection-multiplier="5"
+                   connect-timeout="10000"
+                   max-wait-time="12000"
+                   auto-connect-retry="true"
+                   socket-keep-alive="true"
+                   socket-timeout="60000"
+                   slave-ok="false"
+                   write-number="0"
+                   write-timeout="0"
+                   write-fsync="false"/>
+  	</mongo:mongo>
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+	    <constructor-arg ref="mongo"/>
+	    <constructor-arg name="databaseName" value="${mongodb.dbname}"/>
+	</bean>
 </beans>
 
