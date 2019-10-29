@@ -27,4 +27,9 @@ public class PostgreSQLDaoImpl extends BaseIBatisPostgreDaoImpl
 	{
 		return (Map<String, Object>) getSqlMapClientTemplate().queryForObject("getBizAndUserConnId",portalId);
 	}
+	
+	public Map<String,Object> getAccountByUserConnectID(String userConnectID) throws Exception
+	{
+		return (Map<String, Object>) getSqlMapClientTemplate().queryForObject("getAccountByUserConnectID",userConnectID);
+	}
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kiyoung.cloud</groupId>
-    <artifactId>kiyoungCSB12</artifactId>
-    <packaging>war</packaging>
-    <version>1.0</version>
+	<groupId>com.kiyoung.cloud</groupId>
+	<artifactId>kiyoungCSB12</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
 
-   <properties>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<camel-version>2.16.1</camel-version>
 		<!-- <spring-version>3.1.1.RELEASE</spring-version> -->
@@ -53,10 +53,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>test</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
@@ -236,13 +236,13 @@
 			<version>1.6.11</version>
 		</dependency>
 
-		<!-- Apache lucene and etc-->
+		<!-- Apache lucene and etc -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
 			<version>${apache-lucene}</version>
 		</dependency>
-     	<dependency>
+		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-queryparser</artifactId>
 			<version>${apache-lucene}</version>
@@ -252,13 +252,66 @@
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>${apache-lucene}</version>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-memory</artifactId>
 			<version>${apache-lucene}</version>
 		</dependency>
 
 
+	<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.10-beta2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.10-beta2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.10-beta2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.10-beta2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.46</version>
+		</dependency>
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-highlighter</artifactId>
+			<version>4.6.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mozilla/juniversalchardet -->
+		<!-- https://mvnrepository.com/artifact/com.googlecode.juniversalchardet/juniversalchardet -->
+		<dependency>
+		    <groupId>com.googlecode.juniversalchardet</groupId>
+		    <artifactId>juniversalchardet</artifactId>
+		    <version>1.0.3</version>
+		</dependency>
 		<!-- Commons Lib -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -439,11 +492,13 @@
 			<artifactId>camel-rabbitmq</artifactId>
 			<version>${camel-version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client -->
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>3.5.0</version>
+			<version>4.1.0</version>
 		</dependency>
+
 		<!-- RabbitMQ End -->
 
 		<dependency>
@@ -470,11 +525,11 @@
 
 
 
-    </dependencies>
+	</dependencies>
 
-<build>
-    <finalName>${project.artifactId}</finalName>
-</build>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+	</build>
 
 
 

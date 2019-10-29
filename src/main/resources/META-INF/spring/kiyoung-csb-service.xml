@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:camel="http://camel.apache.org/schema/spring"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd 
          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
          http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
-
+          
 
 	<context:component-scan base-package="com.kiyoung.cloud"></context:component-scan>
+	
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+	<!--동작하는 엔드포인트[1] -->
+	<!--  <endpoint id="thumbMQ_Queue1" uri="rabbitmq://${rabbitMQ.IP}:${rabbitMQ.Port}/amq.direct?connectionFactory=#customConnectionFactory&amp;autoDelete=false"/>-->
+	
+	
+	<!-- 동작하는 엔드포인트[2] 큐 명시 안함 -->
+	<!--  <endpoint id="thumbMQ_Queue1" uri="rabbitmq://${rabbitMQ.IP}:${rabbitMQ.Port}/${rabbitMQ.Exchange4}?connectionFactory=#customConnectionFactory&amp;autoDelete=false"/> -->
+	
+	<!-- 동작하는 엔드포인트[3] 겁나 이상함 -->
+	<endpoint id="thumbMQ_Queue1" uri="rabbitmq://${rabbitMQ.IP}:${rabbitMQ.Port}/${rabbitMQ.Exchange4}?connectionFactory=#customConnectionFactory&amp;queue=${rabbitMQ.QueueName4}?bindingArgs=#bindArgs&amp;autoDelete=false"/> 
+	<endpoint id="rabbitMQ_Queue1" uri="rabbitmq://${rabbitMQ.IP}:${rabbitMQ.Port}/${rabbitMQ.Exchange1}?connectionFactory=#customConnectionFactory&amp;autoDelete=false"/>
+	<endpoint id="rabbitMQ_Queue2" uri="rabbitmq://${rabbitMQ.IP}:${rabbitMQ.Port}/${rabbitMQ.Exchange2}?connectionFactory=#customConnectionFactory&amp;autoDelete=false"/>
+	
+	<!-- 참고 -->
+	<!-- <endpoint id="rabbitMQ_Queue2" uri="rabbitmq://${rabbitMQ.IP}:${rabbitMQ.Port}/${rabbitMQ.Exchange2}?connectionFactory=#customConnectionFactory&amp;queue=${rabbitMQ.QueueName2}&amp;autoDelete=false&amp;durable=true"/> -->
+	</camelContext>
 	
 	<routeContext
 		xmlns="http://camel.apache.org/schema/spring" id="SERVICE_ROUTE">
@@ -31,8 +47,33 @@
 			<process ref="serviceProcess" />
 			<process ref="resultCode"/>
 		</route>
+		        
+		        
+		<route>
+            <from uri="direct:rabbitMQThumb"/>
+            <to uri="thumbMQ_Queue1"/>
+        </route>
+        <route>
+           <from uri="thumbMQ_Queue1" />
+           <to uri="bean:thumbImageService?method=getThumbNail"/>
+        </route>
 		
-
+		
+		<route>
+			<from uri="direct:rabbitMQ1"/>
+			<to uri="rabbitMQ_Queue1"/>
+		</route>
+		<route>
+			<from uri="rabbitMQ_Queue1" />
+			<to uri="bean:IndexService?method=getQueue"/>
+		</route>
+		<!-- <route>
+			<from uri="direct:rabbitMQ2"/>
+			<to uri="rabbitMQ_Queue2"/>
+		</route>  -->
+		
+		
+		
 	</routeContext>
 
 	<bean id="serviceProcess" class="com.kiyoung.cloud.common.service.ServiceProcess"/>
@@ -44,6 +85,23 @@
 		<property name="defaultResultCode" value="0000" />  <!-- Optional Element -->
 	</bean>
 
+	<bean id="customConnectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+	  <property name="host" value="${rabbitMQ.IP}"/>
+	  <property name="port" value="${rabbitMQ.Port}"/>
+	  <property name="username" value="${rabbitMQ.Username}"/>
+	  <property name="password" value="${rabbitMQ.Password}"/>
+	  <property name="virtualHost" value="${rabbitMQ.VirtualHost}"/>
+	  
+	 <!--   <property name="automaticRecoveryEnabled" value="true"/>
+	  <property name="topologyRecoveryEnabled" value="true"/>-->
+	</bean>
+	<!-- 
+	<util:map id="bindArgs" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.Object"> 
+	  <entry key="x-queue-type" value="classic"/>
+	</util:map>
+	-->
+	
+	
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxActive" value="300" />
 		<property name="maxIdle" value="300" />

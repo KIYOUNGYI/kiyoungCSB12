@@ -54,7 +54,7 @@ public class FileUploadServiceTest {
 		System.out.println("json:"+json.toString());
 		String res = "";
 		try {
-			res = sendHttpPost(httpPost, entity, "FileUploadSvc", "uploadsAndCreateFolder");
+			res = sendHttpPost(httpPost, entity, "FileUploadSvc", "uploadsAndCreateFolderVer2");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,9 +101,13 @@ public class FileUploadServiceTest {
 
 //		다중 파일 업로드		
 //		String result = uploadsAndCreateFolder("ab8299a3-563c-4d4a-b234-38b2eca053d6", new File("/Users/yky1990/get-pip.py"), "goatyum@duzon.com/", false, "1387870799000");
-		String[] localFqpn = {"/Users/yky1990/get-pip.py","/Users/yky1990/hello.txt"};
-		String result2 = uploadsAndCreateFolder2("ab8299a3-563c-4d4a-b234-38b2eca053d6", localFqpn, "goatyum@duzon.com/", false, "1387870799000");
-		System.out.println("result2:"+result2);
+//		String[] localFqpn = {"/Users/yky1990/get-pip.py","/Users/yky1990/hello.txt","/Users/yky1990/Downloads/sample_input.txt","/Users/yky1990/Downloads/sample_output.txt"};
+//		String[] localFqpn = {"/Users/yky1990/get-pip.py"};
+		String[] localFqpn = {"/Users/yky1990/dummy1.txt"};
+//		String[] localFqpn = {"/Users/yky1990/Documents/dummyThumb001.jpg"};
+//		String result2 = uploadsAndCreateFolder2("ab8299a3-563c-4d4a-b234-38b2eca053d6", localFqpn, "yky2798@gmail.com/", false, "1387870799000");
+		String result3 = uploadsAndCreateFolder2("ab8299a3-563c-4d4a-b234-38b2eca053d6", localFqpn, "dummy1@gmail.com/1027/", false, "1387870799000");
+		System.out.println("result3:"+result3);
 	}
 	
 	/**

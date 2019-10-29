@@ -49,6 +49,24 @@
 		and u.user_email = #email#
 	
 	</select>
+	<select id="getAccountByUserConnectID" parameterClass="String"
+	resultClass="java.util.HashMap">
+		select
+		u.user_email
+		from
+		public.t_employee e,
+		public.tss_relation_user_id tu,
+		public.tss_relation_biz_id tb,
+		public.t_user u
+		where e.user_no = u.user_no
+		and tu.employee_no = e.employee_no
+		and tb.cno =
+		e.cno
+		and tu.userconnectid = #userConnectID#
+		
+	</select>
+	
+	
 	
 	<select id="getUserSessionInfoByPortalId"
 		parameterClass="String" resultMap="userSessionInfo">
